@@ -22,6 +22,8 @@ var stripAnsi = require('strip-ansi');
 
 var useYarn = fs.existsSync(paths.yarnLockFile);
 
+var dist = paths.appBuild;
+
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
   process.exit(1);
@@ -85,7 +87,7 @@ function printFileSizes(stats, previousSizeMap) {
       var previousSize = previousSizeMap[removeFileNameHash(asset.name)];
       var difference = getDifferenceLabel(size, previousSize);
       return {
-        folder: path.join('build', path.dirname(asset.name)),
+        folder: path.join(dist, path.dirname(asset.name)),
         name: path.basename(asset.name),
         size: size,
         sizeLabel: filesize(size) + (difference ? ' (' + difference + ')' : '')
@@ -156,7 +158,7 @@ function build(previousSizeMap) {
       console.log('The project was built assuming it is hosted at ' + chalk.green(publicPathname) + '.');
       console.log('You can control this with the ' + chalk.green('homepage') + ' field in your '  + chalk.cyan('package.json') + '.');
       console.log();
-      console.log('The ' + chalk.cyan('build') + ' folder is ready to be deployed.');
+      console.log('The ' + chalk.cyan(dist) + ' folder is ready to be deployed.');
       console.log('To publish it at ' + chalk.green(publicUrl) + ', run:');
       // If script deploy has been added to package.json, skip the instructions
       if (typeof appPackage.scripts.deploy === 'undefined') {
@@ -186,7 +188,7 @@ function build(previousSizeMap) {
       console.log('The project was built assuming it is hosted at ' + chalk.green(publicPath) + '.');
       console.log('You can control this with the ' + chalk.green('homepage') + ' field in your '  + chalk.cyan('package.json') + '.');
       console.log();
-      console.log('The ' + chalk.cyan('build') + ' folder is ready to be deployed.');
+      console.log('The ' + chalk.cyan(dist) + ' folder is ready to be deployed.');
       console.log();
     } else {
       if (publicUrl) {
